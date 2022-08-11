@@ -10,7 +10,7 @@ export default class TodosController {
   public async store({ request, response }: HttpContextContract) {
     const data = request.only(['title', 'description', 'completed']);
     const todo = await Todo.create(data);
-    return response.status(201).created({ message: 'created!', todo });
+    return response.created({ message: 'created!', todo });
   }
 
   public async show({ params, response }: HttpContextContract) {
@@ -24,12 +24,12 @@ export default class TodosController {
     todo.description = request.input('description');
     todo.completed = request.input('completed');
     await todo.save();
-    return response.json(todo);
+    return response.status(204).json(todo);
   }
 
   public async destroy({ params, response }: HttpContextContract) {
     const todo = await Todo.findOrFail(params.id);
     await todo.delete();
-    return response.status(200).noContent();
+    return response.status(202).noContent();
   }
 }
